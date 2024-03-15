@@ -39,11 +39,11 @@ menu.value = store.getters.getMenu.filter(item => {
         return item
     }
 })
- onMounted(() => {
+onMounted(() => {
     defaultSelect.value = menu.value[0].path
 })
-const selectTap = (key) => {
-    router.push(menu.value[key].path)
+const selectTap = (path) => {
+    router.push(path)
 }
 const handleClose = (key, keyPath) => {
     console.log(key, keyPath)
