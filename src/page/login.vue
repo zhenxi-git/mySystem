@@ -1,59 +1,92 @@
 <template>
-    <h1>登录页面</h1>
-    <div class="input-box">
-        <el-input v-model="userName" style="width: 240px" placeholder="请输入账号" />
-        <el-input v-model="passWord" :type="isShow?'text':'password'" style="width: 240px" placeholder="请输入密码">
-            <template #append>
-                <el-button :icon="isShow ? View : Hide" @click="lookPassWord" />
-            </template>
-        </el-input>
-    </div>
-    <div class="btnList">
-        <el-button type="default" @click="goHome">登录</el-button>
-        <el-button type="default">注册</el-button>
+    <div class="pageBox">
+
+        <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" :size="large" label-width="auto"
+            class="demo-ruleForm">
+            <h1>登录页面</h1>
+            <el-form-item label="账号" prop="checkPass">
+                <el-input v-model="ruleForm.userName" type="text" autocomplete="off" />
+            </el-form-item>
+
+
+            <el-form-item label="密码" prop="pass">
+                <el-input v-model="ruleForm.pass" type="password" autocomplete="off" />
+            </el-form-item>
+
+
+            <el-form-item>
+                <el-button style="width: 50%;margin-left: 100px;" type="primary"
+                    @click="submitForm(ruleFormRef)">登录</el-button>
+            </el-form-item>
+        </el-form>
     </div>
 
 </template>
+
+
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from "vue-router"
-import { View, Hide } from '@element-plus/icons-vue'
-const userName = ref('')
-const passWord = ref('')
-const router = useRouter()
-const isShow = ref(false)
-const goHome = () => {
-    if (userName.value == '小明' && passWord.value == '123456') {
-        sessionStorage.setItem("token", "dif46das")
-        debugger
-        router.push('/home/page1')
+import { reactive, ref } from 'vue'
+const ruleFormRef = ref()
+const ruleForm = reactive({
+    pass: '',
+    userName: '',
+})
+
+const validateUseName = (rule, value, callback) => {
+    if (value === '') {
+        callback(new Error('请输入用户名'))
     } else {
-        ElMessage.error("密码或者账号错误")
+        if (ruleForm.userName !== '') {
+            if (!ruleFormRef.value) return
+            ruleFormRef.value.validateField('userName', () => null)
+        }
+        callback()
     }
 }
-const lookPassWord = () => {
-    isShow.value = !isShow.value
+const validatePass = (rule, value, callback) => {
+    if (value === '') {
+        callback(new Error('Please input the password again'))
+    } else if (value !== ruleForm.pass) {
+        callback(new Error("Two inputs don't match!"))
+    } else {
+        callback()
+    }
 }
+const rules = reactive({
+    pass: [{ validator: validatePass, trigger: 'blur' }],
+    userName: [{ validator: validateUseName, trigger: 'blur' }],
+})
+
+const submitForm = (formEl) => {
+
+    if (!formEl) return
+    formEl.validate((valid) => {
+        if (valid) {
+            console.log('submit!')
+        } else {
+            console.log('error submit!')
+            return false
+        }
+    })
+}
+
 </script>
 <style lang="less" scoped>
-h1 {
-    text-align: center;
-    margin-top: 200px;
-}
-
-.input-box {
+.pageBox {
+    background-color: cadetblue;
+    height: 100%;
     width: 100%;
-    height: 80px;
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    margin-top: 100px;
-}
 
-.btnList {
-    display: flex;
-    justify-content: center;
+    .demo-ruleForm {
+        min-width: 400px;
+        margin: auto;
+
+        h1 {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+    }
+
 }
 </style>
