@@ -26,6 +26,8 @@
 
 <script setup>
 import { reactive, ref } from 'vue'
+import { useRouter } from "vue-router"
+const router = useRouter()
 const ruleFormRef = ref()
 const ruleForm = reactive({
     pass: '',
@@ -44,11 +46,10 @@ const validateUseName = (rule, value, callback) => {
     }
 }
 const validatePass = (rule, value, callback) => {
+    console.log("1111", value)
     if (value === '') {
-        callback(new Error('Please input the password again'))
-    } else if (value !== ruleForm.pass) {
-        callback(new Error("Two inputs don't match!"))
-    } else {
+        callback(new Error('请输入密码'))
+    }else {
         callback()
     }
 }
@@ -63,6 +64,8 @@ const submitForm = (formEl) => {
     formEl.validate((valid) => {
         if (valid) {
             console.log('submit!')
+         sessionStorage.setItem("token","464d6sa46d")
+            router.push('/home/page1')
         } else {
             console.log('error submit!')
             return false
