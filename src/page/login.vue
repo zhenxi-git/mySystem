@@ -9,8 +9,12 @@
             </el-form-item>
 
 
-            <el-form-item label="密码" prop="pass">
-                <el-input v-model="ruleForm.pass" type="password" autocomplete="off" />
+            <el-form-item label="密码" prop="pass" class="passInput">
+                <el-input v-model="ruleForm.pass" :type="isShow ? 'text' : 'password'" autocomplete="off" />
+                <el-icon  class="icon" @click="changeShow">
+                    <View v-if="isShow" />
+                    <Hide v-else />
+                </el-icon>
             </el-form-item>
 
 
@@ -27,13 +31,14 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from "vue-router"
+import { View, Hide } from '@element-plus/icons-vue'
 const router = useRouter()
 const ruleFormRef = ref()
 const ruleForm = reactive({
     pass: '',
     userName: '',
 })
-
+const isShow = ref(false)
 const validateUseName = (rule, value, callback) => {
     if (value === '') {
         callback(new Error('请输入用户名'))
@@ -49,7 +54,7 @@ const validatePass = (rule, value, callback) => {
     console.log("1111", value)
     if (value === '') {
         callback(new Error('请输入密码'))
-    }else {
+    } else {
         callback()
     }
 }
@@ -57,14 +62,16 @@ const rules = reactive({
     pass: [{ validator: validatePass, trigger: 'blur' }],
     userName: [{ validator: validateUseName, trigger: 'blur' }],
 })
-
+const changeShow = () => {
+    isShow.value = !isShow.value
+}
 const submitForm = (formEl) => {
 
     if (!formEl) return
     formEl.validate((valid) => {
         if (valid) {
             console.log('submit!')
-         sessionStorage.setItem("token","464d6sa46d")
+            sessionStorage.setItem("token", "464d6sa46d")
             router.push('/home/page1')
         } else {
             console.log('error submit!')
@@ -88,6 +95,16 @@ const submitForm = (formEl) => {
         h1 {
             text-align: center;
             margin-bottom: 50px;
+        }
+
+        .passInput {
+            position: relative;
+
+            .icon {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+            }
         }
     }
 

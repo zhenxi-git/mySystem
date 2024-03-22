@@ -16,9 +16,9 @@ const routes = [
     path: "/home",
     name: "Home",
     isHidden: false,
-    redirect: "/login",
-    meta:{
-        title:"首页"
+    redirect:"/home/page1",
+    meta: {
+      title: "主页",
     },
     component: () => import("../page/home.vue"),
     children: [
@@ -29,7 +29,7 @@ const routes = [
         component: () => import("../page/page1.vue"),
         meta: {
           keepAlive: true,
-          title: "页面一",
+          title: "page1",
         },
       },
       {
@@ -39,7 +39,7 @@ const routes = [
         component: () => import("../page/sonPage.vue"),
         meta: {
           keepAlive: true,
-          title: "子页面",
+          title: "sonPage",
         },
       },
       {
@@ -49,7 +49,7 @@ const routes = [
         component: () => import("../page/page2.vue"),
         meta: {
           keepAlive: true,
-          title: "页面二",
+          title: "page2",
         },
       },
     ],

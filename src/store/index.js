@@ -7,6 +7,7 @@ const store = createStore({
           name: "首页",
           path: "/home",
           isHidden: false,
+          redirect: "/home/page1",
           children: [
             {
               path: "/home/page1",

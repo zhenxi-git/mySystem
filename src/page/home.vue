@@ -2,8 +2,8 @@
     <div class="common-layout">
         <el-container class="container">
             <el-aside width="200px" class="left">
-                <el-menu :default-active="defaultSelect" @close="handleClose"  class="el-menu-vertical-demo"
-                    mode="vertical"  @select="selectTap" :unique-opened="false">
+                <el-menu :default-active="defaultSelect" @close="handleClose" class="el-menu-vertical-demo"
+                    mode="vertical" @select="selectTap" :unique-opened="false">
 
                     <template v-for="item in menu" :index="item.path">
                         <el-menu-item :index="item.path" v-if="!item.children || item.children.length <= 0">
@@ -24,7 +24,8 @@
             </el-aside>
             <el-container>
                 <el-header class="top">
-                    <Breadcrumb></Breadcrumb>
+                    <toptarbar></toptarbar>
+                    <Breadcrumb style="margin-top: 10px;"></Breadcrumb>
                 </el-header>
                 <el-main class="main">
                     <keep-alive>
@@ -38,16 +39,20 @@
 </template>
 <script setup>
 import { useStore } from "vuex"
-import { onMounted, ref } from "vue"
+import { onMounted, ref, watch } from "vue"
 import { useRouter, useRoute } from "vue-router";
 import Breadcrumb from "../components/Breadcrumb.vue";
+import toptarbar from '../components/toptarbar.vue'
 const store = useStore()
 const router = useRouter()
 const route = useRoute()
 const defaultSelect = ref('')
 const menu = ref([])
 
-
+watch(route, newValue => {
+    console.log(newValue,"++++++++++++++++++++")
+    defaultSelect.value = newValue.path
+})
 menu.value = store.getters.getMenu.filter(item => {
     if (!item.isHidden) {
         return item
@@ -95,11 +100,10 @@ const handleClose = (key, keyPath) => {
             }
         }
 
-        // .top {
-        //     background-color: bisque;
-
-
-        // }
+        .top {
+            // background-color: bisque;
+            padding: 0;
+        }
 
         // .main {
         //     background-color: red;
