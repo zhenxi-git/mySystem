@@ -1,8 +1,7 @@
 <template>
     <div class="pageBox">
 
-        <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" :size="large" label-width="auto"
-            class="demo-ruleForm">
+        <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="auto" class="demo-ruleForm">
             <h1>登录页面</h1>
             <el-form-item label="账号" prop="checkPass">
                 <el-input v-model="ruleForm.userName" type="text" autocomplete="off" />
@@ -11,7 +10,7 @@
 
             <el-form-item label="密码" prop="pass" class="passInput">
                 <el-input v-model="ruleForm.pass" :type="isShow ? 'text' : 'password'" autocomplete="off" />
-                <el-icon  class="icon" @click="changeShow">
+                <el-icon class="icon" @click="changeShow">
                     <View v-if="isShow" />
                     <Hide v-else />
                 </el-icon>
@@ -29,9 +28,9 @@
 
 
 <script setup>
-import { reactive, ref } from 'vue'
 import { useRouter } from "vue-router"
 import { View, Hide } from '@element-plus/icons-vue'
+
 const router = useRouter()
 const ruleFormRef = ref()
 const ruleForm = reactive({
@@ -68,11 +67,24 @@ const changeShow = () => {
 const submitForm = (formEl) => {
 
     if (!formEl) return
-    formEl.validate((valid) => {
+    formEl.validate(async (valid) => {
         if (valid) {
-            console.log('submit!')
+
+
             sessionStorage.setItem("token", "464d6sa46d")
+
+            // const res = await getRouterJosn(ruleForm.userName);
+            // const routerList = res.data.routerList
+            // routerList.forEach((item) => {
+            //     item.component = () => import(/* @vite-ignore */`@/page${item.component}`)
+            //     router.addRoute(item)
+            // })
+            // console.log(router);
             router.push('/home/page1')
+
+
+
+
         } else {
             console.log('error submit!')
             return false

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        {{str}}
+        <h1 @click="btn">{{str}}</h1>
+        {{bb}}
+        <input type="text" v-model="bb">
+    </div>
+</body>
+
+</html>
+<script src="./vue.js"></script>
+<script>
+    const vue = new Vue({
+        el: "#app",
+        data: {
+            str: "文本内容",
+            bb: "宏伟"
+        },
+        beforeCreate() {
+            console.log("beforeCreate", this.$data, this.$el)
+        },
+        created() {
+            console.log("created", this.$data, this.$el)
+        },
+        beforeMount() {
+            console.log("beforeMount", this.$data, this.$el)
+        },
+        mounted() {
+            console.log("mounted", this.$data, this.$el)
+        },
+        // beforeUpdate() {
+
+        // },
+        // updated() {
+
+        // },
+        // beforeDestroy() {
+
+        // },
+        // destroyed() {
+
+        // },
+        methods: {
+            btn(e) {
+                alert("出发了")
+                console.log(this, "事件对象")
+                this.str = "修改了"
+            }
+        },
+    })
+    //写一下new 的过程
+    function getName(age, name) {
+        this.age = age
+        this.name = name
+        return { aa: 1 }
+    }
+    function New(fun, ...args) {
+        let obj = {}
+        obj.__proto__ = fun.prototype
+        let res = fun.apply(obj, args)
+        return typeof res === "object" ? res : obj
+    }
+    console.log(New(getName, 18, "张三"))
+
+    //sort给数组里的对象按某一属性排序
+    let obj = [
+        { ab: 5, b: "p" },
+        { ab: 8, b: "k" },
+        { ab: 18, b: "k" },
+        { ab: 3, b: "h" },
+        { ab: 88, b: "l" }
+    ]
+    let compare = (ab) => {
+        return (a, b) => {
+
+            let val = a['ab']
+            let val2 = b['ab']
+            return val2 - val
+        }
+    }
+    const obj2 = obj.sort(compare("ab"))
+    console.log(obj2)
+
+    //深拷贝
+    let obj3 = {
+        a: 1,
+        b: {
+            c: 2,
+            d: {
+                e: 3
+            }
+        },
+        c: function () {
+           console.log("我是函数",this.a)
+        }
+    }
+    let obj4 = deepClone(obj3)
+    obj4.b.d.e = 4
+    console.log(obj3, obj4)
+    function deepClone(obj) {
+        //判断是数组还是对象
+        let obj2 = obj.constructor === Array ? [] : {}
+        //判断是引用类型还是值类型
+        if (typeof obj !== "object") {
+            return obj
+        }
+        for (let key in obj) {
+            if (typeof obj[key] !== "object") {
+                obj2[key] = obj[key]
+            } else {
+                if (obj[key].constructor === Function) {
+                    obj2[key] = obj[key].bind(obj2)
+                } else {
+
+                    obj2[key] = deepClone(obj[key])
+                }
+
+            }
+        }
+
+        return obj2
+    }
+    const cloneObj3= deepClone(obj3)
+    cloneObj3.a="你好"
+    cloneObj3.c()
+    obj3.c()
+    console.log(obj3,cloneObj3,"拷贝内容")
+
+
+
+
+
+
+
+
+</script>

@@ -28,9 +28,9 @@
                     <Breadcrumb style="margin-top: 10px;"></Breadcrumb>
                 </el-header>
                 <el-main class="main">
-                    <keep-alive>
-                        <router-view v-if="route.meta.keepAlive"></router-view>
-                    </keep-alive>
+                    <component v-if="route.meta.keepAlive" is="keep-alive">
+                        <router-view></router-view>
+                    </component>
                     <router-view v-if="!route.meta.keepAlive"></router-view>
                 </el-main>
             </el-container>
@@ -50,7 +50,7 @@ const defaultSelect = ref('')
 const menu = ref([])
 
 watch(route, newValue => {
-    console.log(newValue,"++++++++++++++++++++")
+    console.log(newValue, "++++++++++++++++++++")
     defaultSelect.value = newValue.path
 })
 menu.value = store.getters.getMenu.filter(item => {
@@ -105,11 +105,12 @@ const handleClose = (key, keyPath) => {
             padding: 0;
         }
 
-        // .main {
-        //     background-color: red;
+        .main {
+            // background-color: red;
+            overflow: hidden;
 
 
-        // }
+        }
     }
 
 }
